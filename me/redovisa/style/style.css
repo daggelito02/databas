@@ -1,0 +1,31 @@
+body {
+    margin: 8px auto;
+    background: #fff;
+    width: 700px;
+    font-family: Arial, Helvetica, sans-serif; /* default font-familj */
+}
+article {
+    margin-bottom: 2rem;
+}
+.article-image {
+    margin: 0;
+    max-width: 70%;
+}
+.article-image img {
+    width: 100%;
+}
+.material-symbols-outlined {
+    font-size: 1rem;
+    position: relative ;
+    top: .21875rem;
+    right: -.15rem;
+    background: white;
+}
+.align-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: -1rem;
+}
+.align-header h2 {
+    margin-right: 1rem;
+}
