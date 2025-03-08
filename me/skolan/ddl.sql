@@ -2,7 +2,6 @@
 -- Create scheme for database skolan.
 --
 
-
 DROP TABLE IF EXISTS kurstillfalle;
 DROP TABLE IF EXISTS kurs;
 DROP TABLE IF EXISTS larare;
@@ -28,7 +27,7 @@ CREATE TABLE kurs (
     niva CHAR(3)
 );
 
-SHOW CREATE TABLE kurs \G
+-- SHOW CREATE TABLE kurs \G  -- (\G) print result line by line
 
 CREATE TABLE kurstillfalle (
     id INT AUTO_INCREMENT NOT NULL,
@@ -41,7 +40,7 @@ CREATE TABLE kurstillfalle (
     FOREIGN KEY (kursansvarig) REFERENCES larare(akronym)
 );
 
-SHOW CREATE TABLE kurstillfalle \G
+-- SHOW CREATE TABLE kurstillfalle \G -- (\G) print result line by line
 
 --
 -- Make copy of table
@@ -114,7 +113,7 @@ SELECT
 FROM v_lonerevision
 ORDER BY proc DESC;
 
--- Sedan tittar vi enbart på kompetensen.
+-- Only look at the competence.
 
 SELECT 
     akronym, fornamn, efternamn,
