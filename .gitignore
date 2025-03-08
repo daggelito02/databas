@@ -1,6 +1,6 @@
 /bin/
 /build/
-/me/
+# /me/
 vendor/
 composer.lock
 /.venv/
