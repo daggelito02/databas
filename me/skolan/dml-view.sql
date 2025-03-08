@@ -21,7 +21,7 @@
 DROP VIEW IF EXISTS v_larare;
 
 CREATE VIEW v_larare AS
-SELECT *, TIMESTAMPDIFF(YEAR, fodd, CURDATE()) AS ålder
+SELECT *, TIMESTAMPDIFF(YEAR, fodd, CURDATE()) AS alder
 FROM larare
 ;
 -- Gör en SELECT-sats mot vyn som beräknar medelåldern på respektive avdelning. 
