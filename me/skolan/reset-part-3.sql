@@ -17,13 +17,20 @@ use skolan;
 source ddl.sql
 source insert.sql
 source dml-update-lonerevision.sql
+source insert-csv.sql
+
+SELECT * FROM v_course_opportunities;
+
+SELECT * FROM v_age_of_course_leaders;
+
+SELECT * FROM v_age_of_course_leaders_teaches_courses;
 
 SELECT
-    SUM(lon) AS 'Lönesumma',
+    SUM(lon) AS 'Lönesumma before',
     SUM(kompetens) AS Kompetens
 FROM larare_pre;
 
-SELECT
-    SUM(lon) AS 'Lönesumma',
+SELECT 
+    SUM(lon) AS 'Lönesumma after',
     SUM(kompetens) AS Kompetens
 FROM larare;

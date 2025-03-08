@@ -3,16 +3,16 @@
 --
 
 -- Visa lönesumma och Kompetens
-SELECT
-    SUM(lon) AS Lönesumma,
-    SUM(kompetens) AS Kompetens
-FROM larare;
+-- SELECT
+--     SUM(lon) AS Lönesumma,
+--     SUM(kompetens) AS Kompetens
+-- FROM larare;
 
--- Visa lönesumma med lönepott på 6.4%
-SELECT 
-    SUM(lon) AS Lönesumma,
-    ROUND(SUM(lon) * 6.4 / 100) AS Lonepott
-FROM larare;
+-- -- Visa lönesumma med lönepott på 6.4%
+-- SELECT 
+--     SUM(lon) AS Lönesumma,
+--     ROUND(SUM(lon) * 6.4 / 100) AS Lonepott
+-- FROM larare;
 
 -- Albus kompetens är nu 7 och lönen har ökat till 85 000.
 UPDATE larare SET lon = 85000, kompetens = 7 WHERE fornamn = 'Albus';
