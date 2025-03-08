@@ -33,5 +33,3 @@ FROM kurs AS k
     LEFT OUTER JOIN kurstillfalle AS kt
         ON k.kod = kt.kurskod
 WHERE kt.lasperiod IS NULL;
-
-
