@@ -61,7 +61,7 @@ FROM larare
 ;
 
 SELECT avdelning, 
-    ROUND(AVG(ålder)) AS Snittalder
+    ROUND(AVG(alder)) AS Snittalder
 FROM v_larare
 GROUP BY avdelning
 ORDER BY Snittalder DESC

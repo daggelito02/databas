@@ -34,3 +34,5 @@ SELECT
     SUM(lon) AS 'Lönesumma after',
     SUM(kompetens) AS Kompetens
 FROM larare;
+
+SHOW FULL TABLES;
