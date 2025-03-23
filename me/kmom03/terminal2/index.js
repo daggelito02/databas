@@ -1,10 +1,13 @@
 /**
- * Guess my number, a sample CLI client.
+ * Hogwarts databas CLI.
  */
 "use strict";
 
 // Read from commandline
 const readline = require("readline");
+// Import som module functions 
+const getTeachers = require('./src/teachers'); 
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -20,9 +23,16 @@ const rl = readline.createInterface({
 // };
 // const question = util.promisify(rl.question);
 
-// Import the game module
-//const Game = require("./game.js");
-//const game = new Game();
+// Import modules
+//const getTeachers = require('./src/teachers'); 
+
+// (async () => {
+//     try {
+//         await getTeachers(); // Kör main-funktionen
+//     } catch (err) {
+//         console.error("Ett fel inträffade:", err.message);
+//     }
+// })();
 
 
 
@@ -45,7 +55,7 @@ const rl = readline.createInterface({
         + "Välj 'meny' för mer info eller 'exit' för att avsluta.\n"
     );
 
-    rl.setPrompt("Sök lärarinformation eller kolla menyalternativen: ");
+    rl.setPrompt("Skriv in ett sökord/kommando eller kolla menyalternativen: ");
     rl.prompt();
 })();
 
@@ -56,9 +66,8 @@ const rl = readline.createInterface({
  *
  * @param {string} line The input from the user.
  *
- * @returns {void}
  */
-function handleInput(line) {
+async function handleInput(line) {
     line = line.trim();
     switch (line) {
         case "quit":
@@ -71,7 +80,12 @@ function handleInput(line) {
             showMenu();
             break;
         case "larare":
-            searchlarare();
+            try {
+                console.log("Hämtar information om våra lärare ...");
+                await getTeachers();
+            } catch (error) {
+                console.error("Ett fel inträffade:", error.message);
+            }
             break;
         case "kompetens":
             searchCompetence();
@@ -91,7 +105,6 @@ function handleInput(line) {
 
     rl.prompt();
 }
-
 
 
 /**
