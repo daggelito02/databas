@@ -28,19 +28,19 @@ const config = require("./config.json");
     `;
     res = await db.query(sql);
 
-    // // Output raw resultset
-    // console.info(res);
+    // Output raw resultset
+    console.info(res);
 
-    // // Output resultset as JSON
-    // let data;
-    //
-    // data = JSON.stringify(res, null, 4);
-    // console.info(data);
+    // Output resultset as JSON
+    let data;
+    
+    data = JSON.stringify(res, null, 4);
+    console.info(data);
 
-    // // Loop through each row the resultset
-    // for (const row of res) {
-    //     console.info(row);
-    // }
+    // Loop through each row the resultset
+    for (const row of res) {
+        console.info('loop: ', row);
+    }
 
     // Output as formatted text in table
     let str;
