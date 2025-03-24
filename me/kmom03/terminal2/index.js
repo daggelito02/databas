@@ -7,6 +7,8 @@
 const readline = require("readline");
 // Import som module functions 
 const getTeachers = require('./src/teachers'); 
+//const getCompetence = require('./src/competence');
+const getSalary = require('./src/salary');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -88,10 +90,20 @@ async function handleInput(line) {
             }
             break;
         case "kompetens":
-            searchCompetence();
+            try {
+                console.log("Hämtar information lärarnas kompetens ...");
+                await getCompetence();
+            } catch (error) {
+                console.error("Ett fel inträffade:", error.message);
+            }
             break;
         case "lon":
-            searchSalary();
+            try {
+                console.log("Hämtar information lärarnas kompetens ...");
+                await getSalary();
+            } catch (error) {
+                console.error("Ett fel inträffade:", error.message);
+            }
             break;
         case "sok <sokstrang>":
             searchString();
@@ -116,10 +128,10 @@ function showMenu() {
     console.info(
         ` \n I menyn finns dessa kommandon att välja från.\n\n`
         + `  exit, quit, ctrl-d - för att avsluta programmet.\n`
-        + `  help, meny - visar menyval.\n`
-        + `  larare - som visar all information om lärare mm.\n`
-        + `  kompetens - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
-        + `  lon - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
+        + `  help, meny     - visar menyval.\n`
+        + `  larare         - som visar all information om lärare mm.\n`
+        + `  kompetens      - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
+        + `  lon            - visar en rapport hur lönen ändrats i senaste lönerevisionen.\n`
         + `  sok <sokstrang> - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
         + `  nylon <akronym> <lon> - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
         + `  övriga kommandon hanteras ej.\n`
