@@ -5,9 +5,10 @@
 
 // Read from commandline
 const readline = require("readline");
-// Import som module functions 
-const getTeachers = require('./src/teachers'); 
-//const getCompetence = require('./src/competence');
+
+// Import som module functions
+const getTeachers = require('./src/teachers');
+const getCompetence = require('./src/competence');
 const getSalary = require('./src/salary');
 
 const rl = readline.createInterface({
@@ -26,7 +27,7 @@ const rl = readline.createInterface({
 // const question = util.promisify(rl.question);
 
 // Import modules
-//const getTeachers = require('./src/teachers'); 
+//const getTeachers = require('./src/teachers');
 
 // (async () => {
 //     try {
@@ -99,17 +100,17 @@ async function handleInput(line) {
             break;
         case "lon":
             try {
-                console.log("Hämtar information lärarnas kompetens ...");
+                console.log("Hämtar information lärarnas löneutveckling ...");
                 await getSalary();
             } catch (error) {
                 console.error("Ett fel inträffade:", error.message);
             }
             break;
         case "sok <sokstrang>":
-            searchString();
-            break;         
+            //searchString();
+            break;
         case "nylon <akronym> <lon>":
-            searchNewSalaryByeAkronym();
+            //searchNewSalaryByeAkronym();
             break;
         default:
             otherInputs(line);
@@ -133,7 +134,8 @@ function showMenu() {
         + `  kompetens      - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
         + `  lon            - visar en rapport hur lönen ändrats i senaste lönerevisionen.\n`
         + `  sok <sokstrang> - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
-        + `  nylon <akronym> <lon> - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
+        + `  nylon <akronym> <lon> - visar en rapport hur kompetensen`
+        + `  ändrats i senaste lönerevisionen.\n`
         + `  övriga kommandon hanteras ej.\n`
     );
 }
@@ -143,11 +145,11 @@ function showMenu() {
  * Default case handel all other words.
  *
  * @param {string} line A random word
- * 
+ *
  * @returns {void}
  */
 function otherInputs(line) {
-    console.info("\nOrdet \"" + line + "\ finns inte i menyn!\n");
+    console.info("\nOrdet \"" + line + "finns inte i menyn!\n");
 }
 
 /**
@@ -179,6 +181,9 @@ function otherInputs(line) {
 function exitProgram(code) {
     code = code || 0;
 
-    console.info("\n\nProgrammet \"Hogwarts databas\" har avslutats.\nVälkommen tillbaka i en snar framtid :-)\n");
+    console.info(
+        "\n\nProgrammet \"Hogwarts databas\" har avslutats.\n" +
+        "Välkommen tillbaka i en snar framtid :-)\n"
+    );
     process.exit(code);
 }

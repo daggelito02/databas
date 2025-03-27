@@ -33,7 +33,7 @@ const config = require("./config.json");
 
     // Output resultset as JSON
     let data;
-    
+
     data = JSON.stringify(res, null, 4);
     console.info(data);
 

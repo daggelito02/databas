@@ -3,7 +3,7 @@
  */
 "use strict";
 
-const mysql  = require("promise-mysql");
+const mysql = require("promise-mysql");
 const config = require("./config.json");
 
 /**
@@ -18,7 +18,12 @@ async function getSalary() {
 
     sql = `
         SELECT 
-            akronym, fornamn, efternamn, pre, nu, diff,
+            akronym, 
+            fornamn, 
+            efternamn, 
+            pre, 
+            nu, 
+            diff,
             proc,
             mini
         FROM v_lonerevision
@@ -26,13 +31,15 @@ async function getSalary() {
     `;
     res = await db.query(sql);
 
-
     // Output as formatted text in table
     let str;
 
-    str  = "+-----------+---------------------+-----------+--------+---------+------------+-----+\n";
-    str += "| Akronym   | Namn                | Lön före  | Lön nu |  Diff   |  Procent   | Min |\n";
-    str += "+-----------|---------------------|-----------|--------|---------|------------|-----+\n";
+    str = `
++-----------+---------------------+-----------+--------+---------+------------+-----+
+| Akronym   | Namn                | Lön före  | Lön nu |  Diff   |  Procent   | Min |
++-----------|---------------------|-----------|--------|---------|------------|-----+
+`;
+
     for (const row of res) {
         str += "| ";
         str += row.akronym.padEnd(10);
@@ -42,23 +49,24 @@ async function getSalary() {
         str += row.pre.toString().padEnd(10);
         str += "| ";
         str += row.nu.toString().padEnd(6);
-        str += " |";
-        str += row.diff.toString().padStart(8);
-        str += " |";
-        str += row.proc.toString().padStart(11);
-        str += " |";
-        str += row.mini.toString().padStart(4);
+        str += " | ";
+        str += row.diff.toString().padStart(7);
+        str += " | ";
+        str += row.proc.toString().padStart(10);
+        str += " | ";
+        str += row.mini.toString().padStart(3);
         str += " |\n";
     }
-    str += "+-----------|---------------------|-----------|--------|---------|------------|-----+\n";
+    str += `+-----------+---------------------+-----------+--------+---------+------------+-----+
+`;
     console.info(str);
 
     db.end();
-};
+}
 
 module.exports = getSalary;
 
-//temp developing
+// Temp developing
 // getSalary().catch((error) => {
 //     console.error("Ett fel inträffade:", error.message);
 // });
