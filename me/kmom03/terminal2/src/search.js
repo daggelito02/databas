@@ -1,57 +1,24 @@
 /**
- * Show teachers and their departments.
+ * Show teachers and their departments by search string.
  */
 "use strict";
 
 const mysql  = require("promise-mysql");
 const config = require("./config.json");
 
-// Read from commandline
-const readline = require("readline");
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-
 /**
  * Main function.
  *
  * @async
  * @returns void
+ *
  */
-(async function() {
+
+async function searchTeachers(search) {
     const db = await mysql.createConnection(config);
-    let str;
-
-    // Ask question and handle answer in async arrow function callback.
-    rl.question("What to search for? ", async (search) => {
-        str = await searchTeachers(db, search);
-        console.info(str);
-
-        rl.close();
-        db.end();
-    });
-})();
-
-
-
-/**
- * Output resultset as formatted table with details on a teacher.
- *
- * @async
- * @param {connection} db     Database connection.
- * @param {string}     search String to search for.
- *
- * @returns {string} Formatted table to print out.
- */
-async function searchTeachers(db, search) {
     let sql;
     let res;
-    let str;
     let like = `%${search}%`;
-
-    console.info(`Searching for: ${search}`);
 
     sql = `
         SELECT
@@ -59,36 +26,33 @@ async function searchTeachers(db, search) {
             fornamn,
             efternamn,
             avdelning,
-            lon
+            lon,
+            kon,
+            DATE_FORMAT(fodd, '%Y-%m-%d') AS born_date,
+            kompetens
         FROM larare
         WHERE
             akronym LIKE ?
             OR fornamn LIKE ?
             OR efternamn LIKE ?
             OR avdelning LIKE ?
+            OR kon LIKE ?
+            OR DATE_FORMAT(fodd, '%Y-%m-%d') LIKE ?
+            OR kompetens LIKE ?
             OR (lon = ? OR lon LIKE ?)
         ORDER BY akronym;
     `;
-    res = await db.query(sql, [like, like, like, like, search, like]);
-    str = teacherAsTable(res);
-    return str;
-}
+    res = await db.query(sql, [like, like, like, like, like, like, like, search, like]);
 
-
-
-/**
- * Output resultset as formatted table with details on a teacher.
- *
- * @param {RowDataPacket} res Resultset with details on a teacher.
- *
- * @returns {string} Formatted table to print out.
- */
-function teacherAsTable(res) {
+    // Output as formatted text in table
     let str;
 
-    str  = "+-----------+---------------------+-----------+----------+\n";
-    str += "| Akronym   | Namn                | Avdelning |   Lön    |\n";
-    str += "|-----------|---------------------|-----------|----------|\n";
+    str = `
++-----------+---------------------+-----------+------+--------+------------+-----------+
+| Akronym   | Namn                | Avdelning | Kön  |  Lön   |     Född   | Kompetens |
++-----------|---------------------|-----------|------|--------|------------|-----------+
+`;
+
     for (const row of res) {
         str += "| ";
         str += row.akronym.padEnd(10);
@@ -97,10 +61,25 @@ function teacherAsTable(res) {
         str += "| ";
         str += row.avdelning.padEnd(10);
         str += "| ";
-        str += row.lon.toString().padStart(8);
+        str += row.kon.padEnd(4);
+        str += " |";
+        str += row.lon.toString().padStart(7);
+        str += " |";
+        str += " " + row.born_date + "";
+        str += " |";
+        str += row.kompetens.toString().padStart(10);
         str += " |\n";
     }
-    str += "+-----------+---------------------+-----------+----------+\n";
+    str += "+-----------|---------------------|-----------|------";
+    str += "|--------|------------|-----------+";
+    console.info(str);
 
-    return str;
+    db.end();
 }
+
+module.exports = searchTeachers;
+
+// temp developing
+// searchTeachers("7").catch((error) => {
+//     console.error("Ett fel inträffade:", error.message);
+// });

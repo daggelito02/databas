@@ -10,34 +10,13 @@ const readline = require("readline");
 const getTeachers = require('./src/teachers');
 const getCompetence = require('./src/competence');
 const getSalary = require('./src/salary');
+const searchTeachers = require('./src/search');
+const updateSalary = require('./src/updateSalary');
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-
-// // Promisify rl.question to question
-// const util = require("util");
-//
-// rl.question[util.promisify.custom] = (arg) => {
-//     return new Promise((resolve) => {
-//         rl.question(arg, resolve);
-//     });
-// };
-// const question = util.promisify(rl.question);
-
-// Import modules
-//const getTeachers = require('./src/teachers');
-
-// (async () => {
-//     try {
-//         await getTeachers(); // Kör main-funktionen
-//     } catch (err) {
-//         console.error("Ett fel inträffade:", err.message);
-//     }
-// })();
-
-
 
 /**
  * Main function.
@@ -72,17 +51,17 @@ const rl = readline.createInterface({
  */
 async function handleInput(line) {
     line = line.trim();
-    switch (line) {
-        case "quit":
-        case "exit":
+    switch (true) { // To match different conditions
+        case line === "quit":
+        case line === "exit":
             //process.exit();
             exitProgram();
             break;
-        case "help":
-        case "meny":
+        case line === "help":
+        case line === "meny":
             showMenu();
             break;
-        case "larare":
+        case line === "larare":
             try {
                 console.log("Hämtar information om våra lärare ...");
                 await getTeachers();
@@ -90,7 +69,7 @@ async function handleInput(line) {
                 console.error("Ett fel inträffade:", error.message);
             }
             break;
-        case "kompetens":
+        case line === "kompetens":
             try {
                 console.log("Hämtar information lärarnas kompetens ...");
                 await getCompetence();
@@ -98,7 +77,7 @@ async function handleInput(line) {
                 console.error("Ett fel inträffade:", error.message);
             }
             break;
-        case "lon":
+        case line === "lon":
             try {
                 console.log("Hämtar information lärarnas löneutveckling ...");
                 await getSalary();
@@ -106,11 +85,39 @@ async function handleInput(line) {
                 console.error("Ett fel inträffade:", error.message);
             }
             break;
-        case "sok <sokstrang>":
-            //searchString();
+        case line.startsWith("sok "): // Matches the menue word from the variable line
+            {
+                // Createing a search string frim variable line by removing menu word
+                let searchString = line.slice(4).trim();
+
+                if (searchString) {
+                    try {
+                        console.log(`Söker efter: ${searchString}`);
+                        //passing the search string it forward
+                        await searchTeachers(searchString);
+                    } catch (error) {
+                        console.error("Ett fel inträffade vid sökningen:", error.message);
+                    }
+                }
+            }
             break;
-        case "nylon <akronym> <lon>":
-            //searchNewSalaryByeAkronym();
+        case line.startsWith("nylon "): // Matches the menue word from the variable line
+            {
+                // Skär bort "nylon " och dela upp på mellanslag
+                let parts = line.slice(6).trim().split(" ");
+
+                if (parts.length === 2) {
+                    let acronym = parts[0]; // Första delen är akronym
+                    let salary = parts[1]; // Andra delen är lönen
+
+                    //console.log(`Akronym: ${akronym}, Lön: ${lon}`);
+
+                    // Här kan du köra en funktion som använder akronym och lon
+                    await updateSalary(acronym, salary);
+                } else {
+                    console.error("Ogiltig syntax. Använd: nylon <akronym> <lon>");
+                }
+            }
             break;
         default:
             otherInputs(line);
@@ -118,6 +125,7 @@ async function handleInput(line) {
 
     rl.prompt();
 }
+
 
 
 /**
@@ -128,15 +136,18 @@ async function handleInput(line) {
 function showMenu() {
     console.info(
         ` \n I menyn finns dessa kommandon att välja från.\n\n`
-        + `  exit, quit, ctrl-d - för att avsluta programmet.\n`
-        + `  help, meny     - visar menyval.\n`
-        + `  larare         - som visar all information om lärare mm.\n`
-        + `  kompetens      - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
-        + `  lon            - visar en rapport hur lönen ändrats i senaste lönerevisionen.\n`
-        + `  sok <sokstrang> - visar en rapport hur kompetensen ändrats i senaste lönerevisionen.\n`
-        + `  nylon <akronym> <lon> - visar en rapport hur kompetensen`
-        + `  ändrats i senaste lönerevisionen.\n`
-        + `  övriga kommandon hanteras ej.\n`
+        + `  * exit, quit, ctrl-d - för att avsluta programmet.\n`
+        + `  * help, meny            - visar menyval.\n`
+        + `  * larare                - som visar all information om lärare mm.\n`
+        + `  * kompetens             - visar en rapport hur kompetensen ändrats\n`
+        + `   i senaste lönerevisionen.\n`
+        + `  * lon                   - visar en rapport hur lönen ändrats\n`
+        + `  i senaste lönerevisionen.\n`
+        + `  * sok <valfritt sökord> - som söker bland all information hos läraren och visar \n`
+        + `  de lärare som matchar söksträngen.\n`
+        + `  * nylon <akronym> <lon> - som tar argumenten för lärarens akronym samt\n`
+        + `  den nya lönen och uppdaterar lärarens lön.\n\n`
+        + ` Övriga kommandon hanteras ej.\n`
     );
 }
 
@@ -149,7 +160,7 @@ function showMenu() {
  * @returns {void}
  */
 function otherInputs(line) {
-    console.info("\nOrdet \"" + line + "finns inte i menyn!\n");
+    console.info("\nOrdet \"" + line + " inns inte i menyn!\n");
 }
 
 /**
