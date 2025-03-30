@@ -79,7 +79,7 @@ async function handleInput(line, rl) {
                 if (parts.length === 2) {
                     let acronym = parts[0]; // First search word akronym
                     let salary = parts[1]; // Second word are the salery number
-                    
+
                     await updateSalary(acronym, salary);
                 } else {
                     console.error("Ogiltig syntax. Använd: nylon <akronym> <lon>");
